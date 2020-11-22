@@ -176,6 +176,7 @@ export default {
       //     if (response.status === 200 && response.data.status === true) {
       // this.$store.state.didLogin = true
 
+      this.$router.push('/dashboard')
       this.$store.state.didLogin = !this.$store.state.didLogin
       //   this.$router.push('/dashboard')
       //     }
