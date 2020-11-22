@@ -1,5 +1,5 @@
 <template>
-  <div class="ma-12 pa-12">
+  <div class="">
     <!-- <v-card> -->
       <v-navigation-drawer
         app nav clipped width='300'
@@ -14,10 +14,10 @@
 
           <v-list-item link>
             <v-list-item-content>
-              <v-list-item-title class="title">
-                Vu Quy Dat
+              <v-list-item-title class="title mb-2">
+                Ho va Ten
               </v-list-item-title>
-              <v-list-item-subtitle>vudat81299@gmail.com</v-list-item-subtitle>
+              <v-list-item-subtitle>myemail@gmail.com</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -69,6 +69,45 @@
         <span class='font-weight-light'>Shopping</span>
         <span>Via</span>
       </v-toolbar-title>
+
+      <v-spacer></v-spacer>
+            <!-- <v-menu
+              bottom
+              left min-width="450"
+            > -->
+              <!-- <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on" class="mr-4"
+                > -->
+<v-btn icon class="mr-4" @click="showCart">
+        <v-badge
+          color="green"
+        :content="countCart"
+        :value="countCart"
+        >
+
+                  <v-icon>mdi-cart</v-icon>
+        </v-badge>
+                </v-btn>
+              <!-- </template>
+              <v-list>
+                <v-list-item
+                  v-for="item in cart"
+                  :key="item.type"
+                  @click="() => {}"
+                >
+                  <v-list-item-subtitle>
+                    {{ item.item.description }}
+                  </v-list-item-subtitle>
+                    {{ item.amount }}
+                </v-list-item>
+              </v-list> -->
+            <!-- </v-menu> -->
+      <div class="mr-9">Liên hệ: <strong class="grey--text text--darken-2">{{ phonenumber }}</strong></div>
+      <!-- <router-link to='/login' style="text-decoration: none;">Đăng xuất</router-link> -->
+      <v-btn @click="logout">Đăng xuất</v-btn>
     </v-app-bar>
 
     <!-- </v-card> -->
@@ -76,13 +115,63 @@
 </template>
 
 <script>
+import VueSession from 'vue-session'
 export default {
   //
+  beforeCreate: function () {
+    if (!this.$session.exists()) {
+      this.$router.push('/')
+    }
+  },
+  methods: {
+    logout () {
+      this.didLogin = false
+      // this.$session.destroy()
+      this.$router.push('/')
+      this.$store.state.didLogin = !this.$store.state.didLogin
+    },
+    showCart () {
+      this.$router.push('/cart')
+    }
+
+  },
+  watch: {
+    cart () {
+      this.countCart = this.cart.length
+    }
+  },
+  computed: {
+    cart () {
+      console.log(this.$store.state.cart)
+      return this.$store.state.cart
+    }
+  },
   data () {
     return {
+      didLogin: false,
       show: false, // show nav
+      phonenumber: '0123456789',
+      countCart: 0,
+      items: [
+        {
+          title: 'Click Me'
+        },
+        {
+          title: 'Click Me'
+        },
+        {
+          title: 'Click Me'
+        },
+        {
+          title: 'Click Me 2'
+        }
+      ],
       tabs: [
-        { icon: 'mdi-cart', text: 'DashBoard', route: '/dashboard' }
+        { icon: 'mdi-view-dashboard', text: 'Via / BM', route: '/dashboard' },
+        { icon: 'mdi-cash-usd', text: 'Lịch sử thanh toán', route: '/paymenthistory' },
+        { icon: 'mdi-currency-usd', text: 'Nạp tiền', route: '/topup' },
+        { icon: 'mdi-cart', text: 'Giỏ hàng', route: '/cart' },
+        { icon: 'mdi-key', text: 'Mật khẩu', route: '/password' }
       ]
     }
   }

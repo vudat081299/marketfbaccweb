@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <NavigationDrawer></NavigationDrawer>
+    <NavigationDrawer v-if="this.$store.state.didLogin"></NavigationDrawer>
     <v-main>
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
@@ -67,14 +67,39 @@ import NavigationDrawer from './components/NavigationDrawer.vue'
 
 export default Vue.extend({
   name: 'App',
-
+  // mounted() {
+  //   window.onpopstate = event => {
+  //     if (
+  //       window.localStorage.getItem('info') !== null &&
+  //       this.$route.path == '/login'
+  //     ) {
+  //       this.$router.push('/login'); // redirect to home, for example
+  //     }
+  //   }
+  // },
+  computed: {
+    check () {
+      console.log(this.$store.state.didLogin)
+      return false
+    }
+  },
+  watch: {
+    check () {
+      if (this.$store.state.didLogin === true) {
+        this.test = true
+      } else {
+        this.$router.push('/')
+        this.test = false
+      }
+    }
+  },
   components: {
     // HelloWorld,
     NavigationDrawer
   },
 
   data: () => ({
-    //
+    test: false
   })
 })
 </script>
