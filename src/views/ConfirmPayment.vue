@@ -55,7 +55,7 @@
         <v-alert dense
       class="ma-4 mt-n6 white--text"
   border="left"
-  color="red"
+  color="green"
 >
 <v-row>
         <span class="text-xl-h6 ml-6">Tổng tiền</span> <v-spacer></v-spacer><span class="text-xl-h6 mr-4">{{ sumPrice }} 000 (VNĐ)</span>
