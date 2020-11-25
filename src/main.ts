@@ -7,6 +7,7 @@ import vuetify from './plugins/vuetify'
 // Vue.use(VueSession)
 import VueClipboard from 'vue-clipboard2'
 
+Vue.use(VueClipboard)
 Vue.config.productionTip = false
 
 new Vue({

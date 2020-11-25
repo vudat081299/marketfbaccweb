@@ -44,16 +44,20 @@
           <v-col
             cols="8"
           >
-          <v-text-field
+          <v-text-field solo-inverted
             v-model="code"
             label="Mã giao dịch"
-            outlined dense disabled
+            dense disabled
           ></v-text-field>
           </v-col>
 
           <v-col cols="1">
             <div>
-              <v-btn v-clipboard:copy="this.code" icon><v-icon>mdi-content-copy</v-icon></v-btn>
+              <v-btn
+                v-clipboard:copy="code"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+                icon><v-icon>mdi-content-copy</v-icon></v-btn>
             </div>
           </v-col>
 
@@ -83,30 +87,53 @@
         <div class="ma-1">
             <v-container fluid>
             <v-textarea
-            clearable :rules="[v => (v || '' ).length <= 200 || 'Description must be 200 characters or less']"
-            clear-icon="mdi-close-circle"
-            label="Ghi chú"
-            :value="note"
+                counter
+                maxlength="200"
+                single-line
+                clearable :rules="[v => (v || '' ).length <= 200 || 'Ghi chú chỉ cho phép nhỏ hơn 200 kí tự!']"
+                clear-icon="mdi-close-circle"
+                label="Ghi chú"
+                :value="note"
             ></v-textarea>
           </v-container>
         </div>
 
-        <v-card-actions>
+        <div class="ma-4 font-weight-light"><p>
+            Lưu ý: Hãy ấn "Tạo yêu cầu" trước khi chuyển khoản để hệ thống ghi nhận yêu cầu của bạn nhé.
+            Lưu ý: Chúng tôi nhận hàng ngàn lệnh gửi tiền mỗi ngày. Bạn phải gửi đúng nội dung chuyển khoản như hướng dẫn để chúng tôi có thể ghi có cho
+            bạn.Bất cứ sai sót nào cũng có thể dẫn đến mất tiền (Giao dịch sẽ được xử lý từ 1-3 phút).</p>
+        </div>
+
+        <v-card-actions class="pb-4 mr-4">
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
           <v-spacer></v-spacer>
           <v-btn
-            color="green darken-1"
             text
             @click="dialog = false"
           >
             Hủy
           </v-btn>
-          <v-btn
-            color="green darken-1"
-            text
+          <ConfirmPayment @hideParent="hide"></ConfirmPayment>
+          <!-- <v-btn class="white--text"
+            color="green darken-1" large
             @click="dialog = false"
           >
             Tạo giao dịch
-          </v-btn>
+          </v-btn> -->
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -114,19 +141,36 @@
 </template>
 
 <script>
+
+import ConfirmPayment from './ConfirmPayment.vue'
 export default {
+  components: {
+    ConfirmPayment
+  },
   props: ['sumPrice'],
   data () {
     return {
       dialog: false,
       code: 'ABCDEF',
-      note: ''
+      note: '',
+      message: '',
+      copiedText: ''
     }
   },
 
   methods: {
     genCode () {
       this.code = Math.random().toString(36).substring(2, 8)
+    },
+    onCopy: function (e) {
+      console.log('successful')
+      this.copiedText = e.text
+    },
+    onError: function (e) {
+      console.log('Failed to copy texts')
+    },
+    hide () {
+      this.dialog = false
     }
     // copyCode (e) {
     // //   const textToCopy = this.$refs.textToCopy.$el.querySelector('v-text-field')
