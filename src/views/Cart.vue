@@ -36,7 +36,7 @@
                 <v-col cols="5" class="">
                   <v-row>
                     <v-col class="" cols="7">
-                      <h4 class="pr-2 text-right">{{ object.sumPrice }}.000đ</h4>
+                      <h4 class="pr-2 text-right">{{ object.sumPrice }} 000đ</h4>
                     </v-col>
                     <v-col cols="5">
                       <div class="text-center">
@@ -93,7 +93,7 @@
                     </v-col>
 
                     <v-col cols="7">
-                      <span class="text-right red--text"><p class="text-xl-h4 text-right">{{ sumBillPrice }}.000đ</p></span>
+                      <span class="text-right red--text"><p class="text-xl-h5 text-right">{{ sumBillPrice }} 000đ</p></span>
                       <span wrap class="text-right"><p class="font-weight-light mt-n5 text--darken-1 text-right">(Đã bao gồm VAT nếu có)</p></span>
                     </v-col>
                   </v-row>
@@ -103,8 +103,7 @@
 
             <v-row class="mt-n6">
               <v-col cols="12">
-                <v-btn color="#FF424E" class="white--text fillWidthOfParent">Thanh toán
-                </v-btn>
+                <Payment :sumPrice="sumBillPrice"></Payment>
               </v-col>
             </v-row>
           </v-col>
@@ -122,10 +121,14 @@
 </template>
 
 <script>
+
+import Payment from './Payment.vue'
 export default {
+  components: {
+    Payment
+  },
   data () {
     return {
-      countCart: 0,
       array: []
     }
   },
@@ -138,6 +141,13 @@ export default {
         return this.$store.state.cart
       }
     },
+    countCart () {
+      if (this.cart.length === null) {
+        return 0
+      } else {
+        return this.cart.length
+      }
+    },
     sumBillPrice () {
       let total = 0
       for (let i = 0; i < this.cart.length; i++) {
@@ -147,15 +157,18 @@ export default {
     }
   },
   watch: {
-    cart () {
-      if (this.cart.length === null) {
-        this.countCart = 0
-      } else {
-        this.countCart = this.cart.length
-      }
-    }
+    // cart () {
+    //   if (this.cart.length === null) {
+    //     this.countCart = 0
+    //   } else {
+    //     this.countCart = this.cart.length
+    //   }
+    // }
   },
   methods: {
+    // payment () {
+    // },
+
     minus (object) {
       if (object.amount === 0) {
         return
@@ -206,7 +219,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .template {
     /* position:fixed; */
     /* top: 50%; */
@@ -226,6 +239,6 @@ export default {
 .fillWidthOfParent {
     left: 0%;
     right: 0%;
-    width:100%;
+    width: 94%;
 }
 </style>

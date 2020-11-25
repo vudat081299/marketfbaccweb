@@ -5,6 +5,8 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 // import VueSession from 'vue-session'
 // Vue.use(VueSession)
+import VueClipboard from 'vue-clipboard2'
+
 Vue.config.productionTip = false
 
 new Vue({

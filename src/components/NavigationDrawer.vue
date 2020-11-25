@@ -136,14 +136,21 @@ export default {
 
   },
   watch: {
-    cart () {
-      this.countCart = this.cart.length
-    }
+    // cart () {
+    //   this.countCart = this.cart.length
+    // }
   },
   computed: {
     cart () {
       console.log(this.$store.state.cart)
       return this.$store.state.cart
+    },
+    countCart () {
+      if (this.cart.length === null) {
+        return 0
+      } else {
+        return this.cart.length
+      }
     }
   },
   data () {
@@ -151,7 +158,6 @@ export default {
       didLogin: false,
       show: false, // show nav
       phonenumber: '0123456789',
-      countCart: 0,
       items: [
         {
           title: 'Click Me'
@@ -168,8 +174,8 @@ export default {
       ],
       tabs: [
         { icon: 'mdi-view-dashboard', text: 'Via / BM', route: '/dashboard' },
-        { icon: 'mdi-cash-usd', text: 'Lịch sử thanh toán', route: '/paymenthistory' },
-        { icon: 'mdi-currency-usd', text: 'Nạp tiền', route: '/topup' },
+        { icon: 'mdi-cash-usd', text: 'Thanh toán', route: '/paymenthistory' },
+        // { icon: 'mdi-currency-usd', text: 'Nạp tiền', route: '/topup' },
         { icon: 'mdi-cart', text: 'Giỏ hàng', route: '/cart' },
         { icon: 'mdi-key', text: 'Mật khẩu', route: '/password' }
       ]

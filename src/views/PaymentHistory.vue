@@ -3,17 +3,39 @@
     <v-data-table v-if="this.$store.state.didLogin"
       :headers="headers"
       :items="desserts"
-      item-key="name"
+      item-key="id"
       class="elevation-1"
       :search="search"
+      multi-sort
       :custom-filter="filterOnlyCapsText"
+      :footer-props="{
+        'items-per-page-text':'Số giao dịch hiển thị trên 1 trang',
+        'items-per-page-all-text':'Tất cả',
+        'items-per-page-options':[20, 40, -1]
+      }"
     >
+
+      <template v-slot:[`item.state`]="{ item, attrs }">
+        <v-btn
+          depressed
+          x-small
+          class="white--text"
+          v-bind="attrs"
+          width="120px"
+          :color="getStyle(item.state)"
+        >
+        {{ getStateText(item.state) }}
+        </v-btn>
+      </template>
+
       <template v-slot:top>
+        <v-col cols="4">
         <v-text-field
           v-model="search"
           label="Tìm kiếm giao dịch"
           class="mx-4"
         ></v-text-field>
+        </v-col>
       </template>
       <!-- <template v-slot:[`body.append`]>
         <tr>
@@ -59,12 +81,12 @@ export default {
           price: '500.000',
           amount: '50',
           cost: '25.000.000 VNĐ',
-          date: '12/10/2020',
-          state: 'success',
+          date: '15/10/2020',
+          state: 'new',
           action: 'undefined'
         },
         {
-          id: '3',
+          id: '5',
           saler: 'Hoàng',
           itemName: 'Via',
           type: '1.000 like',
@@ -72,7 +94,7 @@ export default {
           amount: '50',
           cost: '25.000.000 VNĐ',
           date: '12/10/2020',
-          state: 'success',
+          state: 'fail',
           action: 'undefined'
         },
         {
@@ -99,27 +121,44 @@ export default {
           sortable: false,
           value: 'id'
         },
-        {
-          text: 'Người bán',
-          value: 'saler',
-          filter: value => {
-            if (!this.calories) return true
+        { text: 'Mã giao dịch', value: 'code', sortable: false },
+        // {
+        //   text: 'Người bán',
+        //   value: 'saler',
+        //   filter: value => {
+        //     if (!this.calories) return true
 
-            return value < parseInt(this.calories)
-          }
-        },
-        { text: 'Tên sản phẩm', value: 'itemName' },
-        { text: 'Loại sản phẩm', value: 'type' },
-        { text: 'Giá', value: 'price' },
+        //     return value < parseInt(this.calories)
+        //   }
+        // },
+        { text: 'Ngân hàng', value: 'bank' },
         { text: 'Số lượng', value: 'amount' },
         { text: 'Thành tiền', value: 'cost' },
         { text: 'Ngày mua', value: 'date' },
-        { text: 'Trạng thái', value: 'state' },
-        { text: 'Hành động', value: 'action' }
+        { text: 'Ghi chú', value: 'note', sortable: false },
+        { text: 'Trạng thái', value: 'state', sortable: false }
       ]
     }
   },
   methods: {
+    getStyle: function (state) {
+      if (state === 'success') {
+        return 'color: green'
+      } else if (state === 'fail') {
+        return 'color: red'
+      } else if (state === 'new') {
+        return 'color: blue'
+      }
+    },
+    getStateText: function (state) {
+      if (state === 'success') {
+        return 'Successful'
+      } else if (state === 'fail') {
+        return 'Error'
+      } else if (state === 'new') {
+        return 'New'
+      }
+    }
     // filterOnlyCapsText (value, search, item) {
     //   return value != null &&
     //     search != null &&

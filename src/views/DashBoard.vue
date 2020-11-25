@@ -105,7 +105,7 @@
           <v-btn
             color="green darken-1"
             text
-            @click="dialog = false"
+            @click="closeEditingItem"
           >
             Hủy
           </v-btn>
@@ -141,7 +141,7 @@ export default {
   computed: {
     form () {
       return {
-        amount: this.editedItem.amount
+        dấdfasf: this.editedItem.amount
       }
     }
   },
@@ -167,14 +167,28 @@ export default {
         { stt: '8', remainingAmountAcc: '68', typeAcc: 'Via', description: 'VIA VIET 2008-2014 RANDOM 50-5K FRIEND', typeCode: '8', price: '50.000' }
       ],
       amount: [
-        v => !!v || 'Số lượng tài khoản không được để trống!',
-        v => (/[!@#$%^&*, `~'":;{}|)(+=._-abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZâÂăĂêÊưƯôÔơƠ]/.test(v) === false) || 'Chỉ nhập số!',
-        v => (/[0123456789]/.test(v) === true)
+        // v => (/[!@#$%^&*, `~'":;{}|)(+=._-]/.test(v) === false) || 'Chỉ nhập số!',
+        v => !!v || 'Số lượng tài khoản không được để trống và chỉ được chứa số!'
+        // v => (/[0123456789]/.test(v) === true)
       ]
     }
   },
+  watch: {
+    editedItem () {
+      if (this.editedItem.amount < 1) {
+        this.editedItem.amount = 1
+      }
+    }
+  },
   methods: {
+    validate () {
+      this.$refs.form.validate()
+      return this.$refs.form.validate()
+    },
     addIntoCart () {
+      if (!this.validate()) {
+        return
+      }
       if (this.editedItem.amount === 0) {
         return
       }
@@ -222,8 +236,9 @@ export default {
       this.dialog = true
       this.editedItem.item = item
     },
-    confirmPayment () {
-      this.showDialog = false
+    closeEditingItem () {
+      this.dialog = false
+      this.editedItem.amount = 1
     }
   }
 }
